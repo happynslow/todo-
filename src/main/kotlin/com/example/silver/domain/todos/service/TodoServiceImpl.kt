@@ -8,6 +8,7 @@ import com.example.silver.domain.todos.model.toResponse
 import com.example.silver.domain.todos.repository.TodoRepostory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -34,11 +35,21 @@ class TodoServiceImpl(
         ).toResponse()
     }
 
-    override fun todoUpdate(todoId: Long, request: TodosRequest): TodoResponse {
-        TODO("Not yet implemented")
-    }//여기 작성해야함
+    @Transactional
+    ovrride fun updateTodo(todosId: Long, request: TodoRequest): TodoResponse {
+        val todos = todoRepostory.findByIdOrNull(todosId) ?: throw IllegalStateException("Todo", "Long")
+//      val (title, description, nickname) = request
+        todos.nickname = request.nickname
+        todos.title = request.title
+        todos.description = request.description
 
-    override fun todoDelete(todoId: Long) {
-        TODO("Not yet implemented")
+        return todoRepository.save(todo).toResponse()
+        //retun TodoRespinse(1,"","",Date(),"")
+    }
+
+    @Transactional
+    override fun deleteTodo(todoId: Long) {
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw IllegalStateException("Todo", todoId)
+        TodoRepository.delete(todo)
     }
 }
