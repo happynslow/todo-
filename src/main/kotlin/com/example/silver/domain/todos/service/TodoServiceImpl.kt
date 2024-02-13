@@ -36,13 +36,13 @@ class TodoServiceImpl(
     }
 
     @Transactional
-    ovrride fun todoUpdate(todosId: Long, request: TodosRequest): TodoResponse {
+    override fun todoUpdate(todosId: Long, request: TodosRequest): TodoResponse {
         val todos = todoRepostory.findByIdOrNull(todosId) ?: throw IllegalStateException("Todo")
         val title = request
         val description = request
         val nickname = request
 
-        todos.nickname = request.userName
+        todos.userName = request.userName
         todos.title = request.title
         todos.description = request.description
 
@@ -51,8 +51,8 @@ class TodoServiceImpl(
     }
 
     @Transactional
-    override fun deleteTodo(todoId: Long) {
+    override fun todoDelete(todoId: Long) {
         val todo = todoRepostory.findByIdOrNull(todoId) ?: throw IllegalStateException("Todo")
-        TodoRepostory.delete(todo) //왤까요? 이녀석들 대체 왜 연결이 안될까요? 기워만든 프랑켄슈타인 코드라서 그런걸까요?
+        TodoRepostory.delete(todo)
     }
 }
